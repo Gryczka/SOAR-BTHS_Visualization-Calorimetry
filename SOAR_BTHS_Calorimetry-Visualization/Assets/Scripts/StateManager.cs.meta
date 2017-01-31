@@ -1,10 +1,26 @@
 fileFormatVersion: 2
 guid: 5707a3c22aa6c4d4c9f6f2de13acd80e
-timeCreated: 1485637703
+timeCreated: 1485791663
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - stepIndicator: {instanceID: 0}
+  - stepDescriber: {instanceID: 0}
+  - weightOfCandleBefore: {instanceID: 0}
+  - weightOfCandleAfter: {instanceID: 0}
+  - weightOfWaxBurned: {instanceID: 0}
+  - weightOfCanEmpty: {instanceID: 0}
+  - weightOfCanFull: {instanceID: 0}
+  - weightOfWaterInCan: {instanceID: 0}
+  - initialTemperature: {instanceID: 0}
+  - temperatureAfter: {instanceID: 0}
+  - can: {instanceID: 0}
+  - candle: {instanceID: 0}
+  - skewer: {instanceID: 0}
+  - candleLight: {instanceID: 0}
+  - chimney: {instanceID: 0}
+  - balance: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
