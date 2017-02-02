@@ -75,9 +75,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Balance.cs" />
     <Compile Include="Assets\Scripts\Can.cs" />
     <Compile Include="Assets\Scripts\Candle.cs" />
     <Compile Include="Assets\Scripts\Chimney.cs" />
+    <Compile Include="Assets\Scripts\Skewer.cs" />
     <Compile Include="Assets\Scripts\StateManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

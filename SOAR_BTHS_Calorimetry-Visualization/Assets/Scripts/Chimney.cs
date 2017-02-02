@@ -3,39 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Chimney : MonoBehaviour {
-    public GameObject stateManagerContainer;
+    public Vector3 inactivePosition;
+    public Vector3 liftedPosition;
+    public Vector3 activePosition;
 
+    private bool interactionEnabled = false;
     private bool dragging = false;
     private float distance;
     private bool movedForward = false;
-    private int step;
     private bool inPosition;
     private bool droppedInPlace;
     static private Quaternion origin = new Quaternion(0, 0, 0, 0);
+    private bool dragged = false;
     void OnMouseDown()
     {
-        if (!inPosition && step == 5)
+        if (interactionEnabled && !inPosition)
         {
             distance = Vector3.Distance(transform.position, Camera.main.transform.position);
             dragging = true;
+            dragged = true;
         }
     }
 
     void OnMouseUp()
     {
         dragging = false;
-        if (inPosition && step == 5)
+        if (inPosition)
         {
-            gameObject.transform.position = stateManagerContainer.GetComponent<StateManager>().chimneyPosition6;
             gameObject.transform.rotation = origin;
+            gameObject.transform.position = activePosition;
             droppedInPlace = true;
             gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            interactionEnabled = false;
         }
     }
 
     private void OnMouseEnter()
     {
-        if (step == 5 && !inPosition && !movedForward)
+        if (interactionEnabled && !inPosition && !movedForward && !dragged)
         {
             gameObject.transform.Translate(-0.1f, 0, -0.5f);
             movedForward = true;
@@ -44,7 +49,7 @@ public class Chimney : MonoBehaviour {
 
     private void OnMouseExit()
     {
-        if (step == 5 && !inPosition && movedForward)
+        if (interactionEnabled && !inPosition && movedForward)
         {
             gameObject.transform.Translate(0.1f, 0, 0.5f);
             movedForward = false;
@@ -53,7 +58,7 @@ public class Chimney : MonoBehaviour {
 
     private void Start()
     {
-        step = 1;
+        interactionEnabled = false;
         inPosition = false;
         droppedInPlace = false;
     }
@@ -64,15 +69,14 @@ public class Chimney : MonoBehaviour {
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Vector3 rayPoint = ray.GetPoint(distance);
-            rayPoint.z = -3.53f;
+            rayPoint.z = -2.5f;
             transform.position = rayPoint;
         }
-        step = stateManagerContainer.GetComponent<StateManager>().getCurrentStep();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "BTHS_GhostChimney" && step == 5)
+        if (other.gameObject.tag == "BTHS_GhostChimney" && interactionEnabled)
         {
             inPosition = true;
             other.gameObject.GetComponent<Renderer>().enabled = true;
@@ -81,7 +85,7 @@ public class Chimney : MonoBehaviour {
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "BTHS_GhostChimney" && step == 5)
+        if (other.gameObject.tag == "BTHS_GhostChimney")
         {
             inPosition = false;
             other.gameObject.GetComponent<Renderer>().enabled = false;
@@ -93,9 +97,40 @@ public class Chimney : MonoBehaviour {
         return droppedInPlace;
     }
 
-    public void SetDroppedInPlace(bool droppedInPlace)
+
+    public void updateObject(int step)
     {
-        inPosition = droppedInPlace;
-        this.droppedInPlace = droppedInPlace;
+        gameObject.transform.rotation = origin;
+        gameObject.SetActive(step != 0);
+        switch (step)
+        {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 10:
+            case 11:
+                interactionEnabled = false;
+                gameObject.transform.position = inactivePosition;
+                gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                break;
+            case 5:
+                interactionEnabled = true;
+                gameObject.transform.position = inactivePosition;
+                gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
+                break;
+            case 6:
+            case 8:
+            case 9:
+                interactionEnabled = false;
+                gameObject.transform.position = activePosition;
+                gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                break;
+            case 7:
+                interactionEnabled = false;
+                gameObject.transform.position = liftedPosition;
+                gameObject.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                break;
+        }
     }
 }

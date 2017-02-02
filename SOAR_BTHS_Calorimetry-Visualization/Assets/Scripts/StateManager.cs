@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class StateManager : MonoBehaviour {
-    public string step1Description;
-    public string step2Description;
-    public string step3Description;
-    public string step4Description;
-    public string step5Description;
-    public string step6Description;
-    public string step7Description;
-    public string step8Description;
-    public string step9Description;
-    public string step10Description;
-    public string step11Description;
+    private string step1Description = "For this lab, you will need the following materials: A candle with a pan, a small can, a chimney, and a balance. (You will also need a coathanger - not portrayed here.)";
+    private string step2Description = "First, weigh the candle and pan together on the balance to the nearest 0.01 g. In this example, the weight is 1.02g.";
+    private string step3Description = "Now, weigh the empty can on the balance to the nearest 0.01g. In this example, the can weighs 14.91g.";
+    private string step4Description = "Fill the can 2/3 of the way with water, then weigh the now-fillled can, and determine the weight of the water. In this example, the can now weighs 264.91g, meaning that there is 250g of water in the can.";
+    private string step5Description = "Finally, assemble the experiment as follows: suspend the can from the top of the hood with the coat hanger, and hang it within the chimney. Now, measure the temperature of the water to the nearest 0.1 degrees Celsius. In this example, it is at room temperature.";
+    private string step6Description = "Now, you may light the candle. Exercise caution: it may be a small fire, but it is still a fire.";
+    private string step7Description = "Lift the chimney, and place the candle and pan underneath it. Make sure that the flame is directly beneath the filled can.";
+    private string step8Description = "Begin to stir the water with the thermometer. Be careful not to hit the edges of the can, as this could result in the thermometer measuring the temperature of the can and not the water.";
+    private string step9Description = "When the thermometer reads 15 degrees higher than the initial reading - in this instance, 38 degrees - blow out the candle, but keep stirring until the temperature no longer increases. Once it is no longer increasing, record the temperature to the nearest 0.1 degrees Celsius.";
+    private string step10Description = "Lift the chimney using a pair of foreceps, and carefully remove the pan. Make sure not to spill any of the wax!  Weigh the candle and pan again. Record the new weight. The difference between the initial weight and this weight is the mass of wax lost to burning.";
+    private string step11Description = "Perform the necessary calculations, and disassemble the experiment. Use forceps to move both the can and the chimney - they are both hot from the candle!";
 
     public Text stepIndicator;
     public Text stepDescriber;
@@ -30,52 +31,39 @@ public class StateManager : MonoBehaviour {
     public Text initialTemperature;
     public Text temperatureAfter;
 
+    public Image leftBanner;
+    public Image rightBanner;
+    public Image titleBanner;
+
     public GameObject can;
     public GameObject ghostCan;
     public GameObject candle;
     public GameObject ghostCandle;
     public GameObject skewer;
-    public Light candleLight;
     public GameObject chimney;
     public GameObject ghostChimney;
     public GameObject balance;
-
-    public Vector3 canPosition0;
-    public Vector3 canPosition2;
-    public Vector3 canPosition4;
-    public Vector3 canPosition6;
-
-    public Vector3 candlePosition0;
-    public Vector3 candlePosition1;
-    public Vector3 candlePosition4;
-    public Vector3 candlePosition6;
-
-    public Vector3 chimneyPosition0;
-    public Vector3 chimneyPosition4;
-    public Vector3 chimneyPosition6;
-
-    public Vector3 balancePosition0;
-    public Vector3 balancePosition1;
 
     private int currentStep;
 
     private float waterWeight = 0;
     private float weightOfWax = 0;
 
-    private Vector3 chimneyPosition6_Elevated;
     int finalStep = 11;
 
     // Use this for initialization
 
-    static private Quaternion origin = new Quaternion(0, 0, 0, 0);
 	void Start () {
-        currentStep = 1;
-
-        candleLight.enabled = false;
+        currentStep = 0;
 
         updateObjects();
-        chimneyPosition6_Elevated = chimneyPosition6;
-        chimneyPosition6_Elevated.y += 0.1f;
+        ghostCan.GetComponent<Renderer>().enabled = false;
+        ghostCandle.GetComponent<Renderer>().enabled = false;
+        foreach (Renderer renderer in ghostCandle.GetComponentsInChildren<Renderer>())
+        {
+            renderer.enabled = false;
+        }
+        ghostChimney.GetComponent<Renderer>().enabled = false;
     }
 
     public int getCurrentStep()
@@ -86,8 +74,7 @@ public class StateManager : MonoBehaviour {
     void Update()
     {
         stepIndicator.text = string.Concat("Step ", currentStep.ToString());
-        //updateObjects();
-        if (can.GetComponent<Can>().GetDroppedOnSkewer())
+        if (can.GetComponent<Can>().GetDroppedInPlace())
         {
             ghostCan.GetComponent<Renderer>().enabled = false;
         }
@@ -127,198 +114,65 @@ public class StateManager : MonoBehaviour {
 
     private void updateObjects()
     {
+        titleBanner.gameObject.SetActive(currentStep == 0);
+        leftBanner.gameObject.SetActive(currentStep != 0);
+        rightBanner.gameObject.SetActive(currentStep != 0);
         switch (currentStep)
         {
+            case 0:
+                break;
             case 1:
-                //ghostCan.SetActive(false);
-                //ghostCan.GetComponent<Renderer>().enabled = false;
-                //ghostCandle.GetComponent<Renderer>().enabled = false;
-                ghostCan.GetComponent<Renderer>().enabled = false;
-                ghostChimney.GetComponent<Renderer>().enabled = false;
-                foreach (Renderer renderer in ghostCandle.GetComponentsInChildren<Renderer>())
-                {
-                    renderer.enabled = false;
-                }
-                //ghostCandle.SetActive(false);
-                candleLight.enabled = false;
-                chimney.transform.position = chimneyPosition0;
-                candle.transform.position = candlePosition0;
-                can.transform.position = canPosition0;
-                balance.transform.position = balancePosition0;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                skewer.SetActive(false);
                 stepDescriber.text = step1Description;
                 break;
             case 2:
-                candle.transform.position = candlePosition1;
-                chimney.transform.position = chimneyPosition0;
-                balance.transform.position = balancePosition1;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
-                candleLight.enabled = false;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.transform.position = canPosition0;
-                skewer.SetActive(false);
-                stepDescriber.text = step2Description;
                 weightOfCandleBefore.text = string.Concat(candle.GetComponent<Candle>().massBeforeBurn.ToString(), " g");
+                stepDescriber.text = step2Description;
                 break;
             case 3:
-                can.transform.position = canPosition2;
-                chimney.transform.position = chimneyPosition0;
-                candle.transform.position = candlePosition0;
-                balance.transform.position = balancePosition1;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candleLight.enabled = false;
-                skewer.SetActive(false);
-                stepDescriber.text = step3Description;
                 weightOfCanEmpty.text = string.Concat(can.GetComponent<Can>().emptyWeight.ToString(), " g");
+                stepDescriber.text = step3Description;
                 break;
             case 4:
-                candleLight.enabled = false;
-                candle.transform.position = candlePosition0;
-                skewer.SetActive(false);
-                chimney.transform.position = chimneyPosition0;
-                can.transform.position = canPosition2;
-                balance.transform.position = balancePosition1;
-                stepDescriber.text = step4Description;
                 weightOfCanFull.text = string.Concat(can.GetComponent<Can>().weightWithWater.ToString(), " g");
                 waterWeight = can.GetComponent<Can>().weightWithWater - can.GetComponent<Can>().emptyWeight;
                 weightOfWaterInCan.text = string.Concat(waterWeight.ToString(), " g");
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+                stepDescriber.text = step4Description;
                 break;
             case 5:
-                can.transform.position = canPosition0;
-                skewer.SetActive(true);
-                balance.transform.position = balancePosition0;
-                can.GetComponent<Can>().SetOnSkewer(false);
-                can.GetComponent<Can>().SetDroppedOnSkewer(false);
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
-                chimney.transform.position = chimneyPosition0;
-                chimney.GetComponent<Chimney>().SetDroppedInPlace(false);
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
-                //candle.transform.position = candlePosition4;
                 stepDescriber.text = step5Description;
-                initialTemperature.text = string.Concat(can.GetComponent<Can>().initialTemp.ToString(), " C");
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
                 break;
             case 6:
-                skewer.SetActive(true);
-                can.transform.position = canPosition6;
-                chimney.transform.position = chimneyPosition6;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Can>().SetOnSkewer(true);
-                //candleLight.enabled = true;
-                //candle.transform.position = candlePosition4;
-                candle.transform.position = candlePosition0;
-                candle.GetComponent<Candle>().SetDroppedInPlace(false);
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotation;
                 stepDescriber.text = step6Description;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
                 break;
             case 7:
-                //candle.transform.position = candlePosition6;
-                //balance.transform.position = balancePosition0;
-                chimney.transform.position = chimneyPosition6_Elevated;
-                //skewer.SetActive(true);
-                //candleLight.enabled = true;
-                candleLight.enabled = true;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                //candle.transform.position = candlePosition6;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
+                initialTemperature.text = string.Concat(can.GetComponent<Can>().initialTemp.ToString(), " C");
                 stepDescriber.text = step7Description;
                 break;
             case 8:
-                candle.transform.position = candlePosition6;
-                chimney.transform.position = chimneyPosition6;
-                can.transform.position = canPosition6;
-                balance.transform.position = balancePosition0;
                 stepDescriber.text = step8Description;
-                candleLight.enabled = true;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
                 break;
             case 9:
-                skewer.SetActive(true);
-                //candleLight.enabled = false;
-                stepDescriber.text = step9Description;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candleLight.enabled = false;
                 temperatureAfter.text = string.Concat(can.GetComponent<Can>().finalTemp.ToString(), " C");
-                candle.transform.position = candlePosition6;
-                chimney.transform.position = chimneyPosition6;
-                can.transform.position = canPosition6;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
-                balance.transform.position = balancePosition0;
+                stepDescriber.text = step9Description;
                 break;
             case 10:
-                skewer.SetActive(false);
-                stepDescriber.text = step10Description;
-                chimney.transform.position = chimneyPosition0;
-                candle.transform.position = candlePosition1;
-                can.transform.position = canPosition0;
-                balance.transform.position = balancePosition1;
                 weightOfCandleAfter.text = string.Concat(candle.GetComponent<Candle>().massAfterBurn.ToString(), " g");
                 weightOfWax = candle.GetComponent<Candle>().massBeforeBurn - candle.GetComponent<Candle>().massAfterBurn;
                 weightOfWaxBurned.text = string.Concat(weightOfWax.ToString(), " g");
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
+                stepDescriber.text = step10Description;
                 break;
             case 11:
-                candleLight.enabled = false;
-                chimney.transform.position = chimneyPosition0;
-                candle.transform.position = candlePosition0;
-                can.transform.position = canPosition0;
-                balance.transform.position = balancePosition0;
-                skewer.SetActive(false);
                 stepDescriber.text = step11Description;
-                chimney.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                candle.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                can.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-                chimney.transform.rotation = origin;
-                candle.transform.rotation = origin;
-                can.transform.rotation = origin;
                 break;
             default:
                 currentStep = 1;
                 updateObjects();
                 break;
         }
+        can.GetComponent<Can>().updateObject(currentStep);
+        candle.GetComponent<Candle>().updateObject(currentStep);
+        chimney.GetComponent<Chimney>().updateObject(currentStep);
+        balance.GetComponent<Balance>().updateObject(currentStep);
+        skewer.GetComponent<Skewer>().updateObject(currentStep);
     }
 }
