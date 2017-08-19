@@ -1,10 +1,10 @@
 # =============== #
 # Unity generated #
 # =============== #
-[Tt]emp/
-[Oo]bj/
-[Bb]uild
-/[Ll]ibrary/
+SOAR_BTHS_Calorimetry-Visualization/[Tt]emp/
+SOAR_BTHS_Calorimetry-Visualization/[Oo]bj/
+SOAR_BTHS_Calorimetry-Visualization/[Bb]uild/
+SOAR_BTHS_Calorimetry-Visualization/[Ll]ibrary/
 sysinfo.txt
 *.stackdump
  
