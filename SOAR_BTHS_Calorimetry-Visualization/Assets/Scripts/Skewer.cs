@@ -3,17 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Skewer : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void updateObject(int step)
     {
         switch (step)
