@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 public class StateManager : MonoBehaviour {
     private string step1Description = "For this lab, you will need the following materials: A candle with a pan, a small can, a chimney, and a balance. (You will also need a coathanger - not portrayed here.)";
     private string step2Description = "First, weigh the candle and pan together on the balance to the nearest 0.01 g. In this example, the weight is 1.02g.";
@@ -50,8 +49,6 @@ public class StateManager : MonoBehaviour {
     private float weightOfWax = 0;
 
     int finalStep = 11;
-
-    // Use this for initialization
 
 	void Start () {
         currentStep = 0;

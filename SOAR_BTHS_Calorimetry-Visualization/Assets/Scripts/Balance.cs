@@ -5,15 +5,6 @@ using UnityEngine;
 public class Balance : MonoBehaviour {
     public Vector3 inactivePosition;
     public Vector3 activePosition;
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
     public void updateObject(int step)
     {

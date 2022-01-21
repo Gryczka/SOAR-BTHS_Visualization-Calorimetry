@@ -71,8 +71,6 @@ public class Can : MonoBehaviour {
         }
     }
 
-
-
     private void Update()
     {
         if (dragging)
